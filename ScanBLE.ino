@@ -27,9 +27,6 @@ OLED_MOSI, OLED_CLK, OLED_DC, OLED_RESET, OLED_CS);
 unsigned long previousMillis = 0;
 const long interval = 1800000;
 
-//String knownBLEAddresses[] = {"ac:0b:fb:67:fd:42"};
-//int RSSI_THRESHOLD = -50;
-//bool device_found;
 int scanTime = 5; //In seconds
 BLEScan* pBLEScan;
 class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
@@ -80,33 +77,12 @@ class MyAdvertisedDeviceCallbacks: public BLEAdvertisedDeviceCallbacks {
         esp_task_wdt_reset(); 
         }
       }
-/*
-      for (int i = 0; i < (sizeof(knownBLEAddresses) / sizeof(knownBLEAddresses[0])); i++)
-      {
-        //Uncomment to Enable Debug Information
-        //Serial.println("*************Start**************");
-        //Serial.println(sizeof(knownBLEAddresses));
-        //Serial.println(sizeof(knownBLEAddresses[0]));
-        //Serial.println(sizeof(knownBLEAddresses)/sizeof(knownBLEAddresses[0]));
-        //Serial.println(advertisedDevice.getAddress().toString().c_str());
-        //Serial.println(knownBLEAddresses[i].c_str());
-        //Serial.println("*************End**************");
-        if (strcmp(advertisedDevice.getAddress().toString().c_str(), knownBLEAddresses[i].c_str()) == 0)
-                        {
-          device_found = true;
-                          break;
-                        }
-        else
-          device_found = false;
-      }
-      Serial.printf("Advertised Device: %s \n", advertisedDevice.toString().c_str());*/
     }
 };
 
 void setup() {
-  Serial.begin(115200); //Enable UART on ESP32
-  Serial.println("Scanning..."); // Print Scanning
-  //pinMode(2, OUTPUT); //make BUILTIN_LED pin as output
+  Serial.begin(115200); 
+  Serial.println("Scanning..."); 
   display.begin(SSD1306_SWITCHCAPVCC);
   display.clearDisplay();
   display.display(); 
@@ -122,25 +98,12 @@ void setup() {
   pBLEScan->setWindow(99);  // less or equal setInterval value
 }
 void loop() {
-  // put your main code here, to run repeatedly:
    unsigned long currentMillis = millis();
    if ( currentMillis >= interval ){ 
       // previousMillis = currentMillis; 
-         // Added to repeatedly reset the Watch Dog Timer      
+     // Added to repeatedly reset the Watch Dog Timer      
         }
   BLEScanResults foundDevices = pBLEScan->start(scanTime, false);
- /* for (int i = 0; i < foundDevices.getCount(); i++)
-  {
-    BLEAdvertisedDevice device = foundDevices.getDevice(i);
-    int rssi = device.getRSSI();
-    Serial.print("RSSI: ");
-    Serial.println(rssi);
-    if (rssi > RSSI_THRESHOLD && device_found == true){
-      digitalWrite(2, HIGH);
-      Serial.println("attack");}
-    else
-      digitalWrite(2, LOW);
-  }*/
   pBLEScan->clearResults();   // delete results fromBLEScan buffer to release memory
   delay(500);
 
